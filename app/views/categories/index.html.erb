@@ -1,0 +1,29 @@
+<h1>Listing categories</h1>
+
+<table>
+  <tr>
+    <th>Desciption</th>
+    <th>Created by</th>
+    <th>Updated by</th>
+    <th>Deleted</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @categories.each do |category| %>
+  <tr>
+    <td><%= category.desciption %></td>
+    <td><%= category.created_by %></td>
+    <td><%= category.updated_by %></td>
+    <td><%= category.deleted %></td>
+    <td><%= link_to 'Show', category %></td>
+    <td><%= link_to 'Edit', edit_category_path(category) %></td>
+    <td><%= link_to 'Destroy', category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Category', new_category_path %>

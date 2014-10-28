@@ -1,0 +1,75 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Event:</b>
+  <%= @event.event_id %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%= @event.name %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @event.description %>
+</p>
+
+<p>
+  <b>From date:</b>
+  <%= @event.from_date %>
+</p>
+
+<p>
+  <b>To date:</b>
+  <%= @event.to_date %>
+</p>
+
+<p>
+  <b>From time:</b>
+  <%= @event.from_time %>
+</p>
+
+<p>
+  <b>To time:</b>
+  <%= @event.to_time %>
+</p>
+
+<p>
+  <b>Venue:</b>
+  <%= @event.venue %>
+</p>
+
+<p>
+  <b>Category:</b>
+  <%= @event.category %>
+</p>
+
+<p>
+  <b>Min before start:</b>
+  <%= @event.min_before_start %>
+</p>
+
+<p>
+  <b>Max before end:</b>
+  <%= @event.max_before_end %>
+</p>
+
+<p>
+  <b>Created by:</b>
+  <%= @event.created_by %>
+</p>
+
+<p>
+  <b>Updated by:</b>
+  <%= @event.updated_by %>
+</p>
+
+<p>
+  <b>Deleted:</b>
+  <%= @event.deleted %>
+</p>
+
+
+<%= link_to 'Edit', edit_event_path(@event) %> |
+<%= link_to 'Back', events_path %>

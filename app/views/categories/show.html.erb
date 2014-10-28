@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Desciption:</b>
+  <%= @category.desciption %>
+</p>
+
+<p>
+  <b>Created by:</b>
+  <%= @category.created_by %>
+</p>
+
+<p>
+  <b>Updated by:</b>
+  <%= @category.updated_by %>
+</p>
+
+<p>
+  <b>Deleted:</b>
+  <%= @category.deleted %>
+</p>
+
+
+<%= link_to 'Edit', edit_category_path(@category) %> |
+<%= link_to 'Back', categories_path %>
