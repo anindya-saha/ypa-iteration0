@@ -14,30 +14,31 @@
 ActiveRecord::Schema.define(:version => 20141028040328) do
 
   create_table "categories", :force => true do |t|
-    t.text     "description"
+    t.string   "name"
+    t.text     "desc"
     t.string   "created_by"
     t.string   "updated_by"
     t.boolean  "deleted"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "events", :primary_key => "event_id", :force => true do |t|
     t.string   "name"
-    t.text     "description"
+    t.text     "desc"
     t.date     "from_date"
     t.date     "to_date"
     t.time     "from_time"
     t.time     "to_time"
     t.string   "venue"
-    t.string   "category"
+    t.integer  "category_id"
     t.integer  "min_before_start"
     t.integer  "max_before_end"
     t.string   "created_by"
     t.string   "updated_by"
-    t.boolean  "deleted"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.boolean  "deleted",          :default => false, :null => false
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
   end
 
   create_table "interests", :force => true do |t|

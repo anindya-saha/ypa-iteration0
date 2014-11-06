@@ -1,9 +1,150 @@
 class Event < ActiveRecord::Base
-  attr_accessible :event_id, :name, :description, :from_date, :to_date, :from_time, :to_time, :venue, :category, :min_before_start, :max_before_end, :created_by, :updated_by, :deleted
+  require 'time'
+  require 'date'
 
+  attr_accessible :event_id, :name, :desc, :from_date, :to_date, :from_time, :to_time, :venue, :category, :category_id, :min_before_start, :max_before_end, :created_by, :updated_by, :deleted
+  
+  # an event must have a category
+  belongs_to :category
+  
+  # use event_id as the primary key and not the default generated id column
   self.primary_key = "event_id"
+  
+  # the username, password fields must be present
+  validates :name, :from_date, :to_date, :from_time, :to_time, presence: true
+  
+  # user cannot sign-in to the event before 30mins of the start
+  validates :min_before_start, numericality: { only_integer: true, less_than_or_equal_to: 30 }
+  
+  # user can sign-in till 30mins before end
+  validates :max_before_end, numericality: { only_integer: true, less_than_or_equal_to: 60, greater_than_or_equal_to: 30 }
+  
+  # all date validations
+  validate :from_date_cannot_be_in_the_past, :to_date_cannot_be_in_the_past, :to_date_cannot_be_less_than_from_date, :to_time_cannot_be_less_than_from_time
+ 
+  # Registering ActiveRecord Callbacks
+  before_create do
+	recalculcate_from_time_and_to_time()
+  end
 
+  before_update do
+    recalculcate_from_time_and_to_time()
+  end
+  
+  def recalculcate_from_time_and_to_time
+  	# from_time should be added to from_date, to_time should be added to to_date
+    
+	if from_date.present?
+		self.from_time = Time.mktime(from_date.year, from_date.month, from_date.day, self.from_time.hour, self.from_time.min)
+	end
+	
+	if to_date.present?
+		self.to_time = Time.mktime(to_date.year, to_date.month, to_date.day, self.to_time.hour, self.to_time.min)
+	end
+  end
+  
+  def from_date_cannot_be_in_the_past
+    if from_date.present? && from_date < Date.today
+      errors.add(:from_date, "can't be in the past")
+    end
+  end
+
+  def to_date_cannot_be_in_the_past
+    if to_date.present? && to_date < Date.today
+      errors.add(:to_date, "can't be in the past")
+    end
+  end
+  
+  def to_date_cannot_be_less_than_from_date
+    if to_date.present? && to_date < from_date
+      errors.add(:to_date, "can't be less than From Date")
+    end
+  end
+  
+  def to_time_cannot_be_less_than_from_time
+    if to_time.present? && to_time < from_time
+      errors.add(:to_time, "can't be less than From Time")
+    end
+  end
+  
   # associate event with user through user_event table
   has_many :user_events
   has_many :users, through: :user_events
+  
+  def self.search(name, category_id, venue, from_date, to_date)
+    
+	query = ''
+    
+	if !name.nil? && !name.blank?
+      #sc = "%"+name+"%"
+	  if query.length>0
+        query = query + ' AND name LIKE "%' + name + '%"'
+      else
+        query = query + 'name Like "%' + venue + '%"'
+      end
+    end
+
+    if !category_id.nil? && !category_id.blank?
+      if query.length>0
+        query = query + ' AND category_id = "' +  category_id + '"'
+      else
+        query = 'category_id = "' +  category_id + '"'
+      end
+    end
+
+    if !venue.nil? && !venue.blank?
+      #sc = "%"+venue+"%"
+      if query.length>0
+        query = query + ' AND venue LIKE "%' + venue + '%"'
+      else
+        query = query + 'venue Like "%' + venue + '%"'
+      end
+    end
+
+    if !from_date.nil?
+      day = from_date["written_on(3i)"];
+      
+	  if day.length != 0
+        if day.length == 2
+          day = "0" + day
+        end
+
+        month = from_date["written_on(2i)"];
+        if month.length == 1
+          month = "0" + month
+        end
+        date_string = from_date["written_on(1i)"] + "-" + month + "-" + day;
+        if query.length > 0
+          query = query + ' AND from_date >= "' +  date_string + '"'
+        else
+          query = 'from_date >= "' +  date_string + '"'
+        end
+      end
+    end
+
+
+    if !to_date.nil? && !to_date.blank?
+      day = to_date["written_on(3i)"];
+      if day.length != 0
+        if day.length < 2
+          day = "0" + day
+        end
+
+        month = to_date["written_on(2i)"];
+        if month.length < 2
+          month = "0" + month
+        end
+        date_string = to_date["written_on(1i)"] + "-" + month + "-" + day;
+        if query.length>0
+          query = query + ' AND to_date <= "' + date_string + '"'
+        else
+          query = 'to_date <= "' +  date_string + '"'
+        end
+      end
+    end
+    
+	#puts query
+
+    find(:all, :conditions => query)
+  end
 end

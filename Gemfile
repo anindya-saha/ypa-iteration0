@@ -7,6 +7,7 @@ gem 'rails', '3.2.19'
 
 group :development, :test do
   gem 'sqlite3'
+  gem 'faker'
 end
 
 #group :production do
@@ -14,7 +15,7 @@ end
   #gem 'rails_12factor', '0.0.2'
 #end
 
-#group :production do
+#group :client do
   #gem 'mysql', '~> 2.9.1'
   #gem 'mysql2', '~> 0.3.13'
 #end
@@ -32,6 +33,7 @@ group :assets do
 end
 
 gem 'jquery-rails'
+gem 'will_paginate'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

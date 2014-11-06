@@ -2,7 +2,10 @@ class EventsController < ApplicationController
   # GET /events
   # GET /events.json
   def index
-    @events = Event.all
+    #@events = Event.all
+	#@events = Event.where(deleted: false)
+    @events = Event.search(params[:name], params[:category_id], params[:venue], params[:from_date], params[:to_date]).paginate(page: params[:page], per_page: 10)
+    #@events = @events.paginate(page: params[:page], per_page: 10)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -73,6 +76,7 @@ class EventsController < ApplicationController
   # DELETE /events/1.json
   def destroy
     @event = Event.find(params[:id])
+    #@event.update_attribute(:deleted, true)
     @event.destroy
 
     respond_to do |format|

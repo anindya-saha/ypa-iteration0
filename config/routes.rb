@@ -8,6 +8,8 @@ YpaIteration0::Application.routes.draw do
   get "login/login"
 
   get "login/logout"
+  
+  get "/events/search"
 
   resources :categories
 

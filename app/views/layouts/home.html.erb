@@ -1,0 +1,28 @@
+<% content_for :application do %>
+
+	<tr>
+		<!-- ============ NAVIGATION BAR SECTION ============== -->
+		<td colspan="2" align="right" style="height: 20px;" bgcolor="#a9ae9f"><a href="#">Sign Out</a></td>
+	</tr>
+
+	<tr>
+
+		<!-- ============ LEFT COLUMN (MENU) ============== -->
+		<td width="20%" valign="top" bgcolor="#999f8e">
+			<%= link_to 'Create Event', new_event_path %><br>
+			<%= link_to 'Search', '/events' %><br>
+			<a href="#">RSVP/Sign-In</a><br>
+			<a href="#">Reports</a><br>
+		</td>
+
+		<!-- ============ RIGHT COLUMN (CONTENT) ============== -->
+		<td width="80%" valign="top" bgcolor="#d2d8c7">
+
+			<%= yield :home %>
+
+		<td>
+	</tr>
+
+<% end %>
+
+<%= render template: "layouts/application" %>

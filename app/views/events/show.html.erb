@@ -1,9 +1,13 @@
+<% content_for :home do %>
+
 <p id="notice"><%= notice %></p>
 
+<!--
 <p>
   <b>Event:</b>
   <%= @event.event_id %>
 </p>
+-->
 
 <p>
   <b>Name:</b>
@@ -12,29 +16,38 @@
 
 <p>
   <b>Description:</b>
-  <%= @event.description %>
+  <%= @event.desc %>
 </p>
 
+<!--
 <p>
-  <b>From date:</b>
+  <b>From Date:</b>
   <%= @event.from_date %>
 </p>
 
 <p>
-  <b>To date:</b>
+  <b>To Date:</b>
   <%= @event.to_date %>
 </p>
 
 <p>
-  <b>From time:</b>
+  <b>From Time:</b>
   <%= @event.from_time %>
 </p>
 
 <p>
-  <b>To time:</b>
+  <b>To Time:</b>
   <%= @event.to_time %>
 </p>
-
+-->
+<p>
+  <b>From:</b>
+  <%= @event.from_date.strftime('%d-%b-%Y') + ' ' + @event.from_time.strftime('%I:%M %p %:z') %>
+</p>
+<p>
+  <b>To:</b>
+  <%= @event.to_date.strftime('%d-%b-%Y') + ' ' + @event.to_time.strftime('%I:%M %p %:z') %>
+</p>
 <p>
   <b>Venue:</b>
   <%= @event.venue %>
@@ -42,34 +55,42 @@
 
 <p>
   <b>Category:</b>
-  <%= @event.category %>
+  <%= @event.category.blank? ? '' : @event.category.name %>
 </p>
 
 <p>
-  <b>Min before start:</b>
+  <b>Sign-In Starts Before(mins):</b>
   <%= @event.min_before_start %>
 </p>
 
 <p>
-  <b>Max before end:</b>
+  <b>Sign-In Ends Before(mins):</b>
   <%= @event.max_before_end %>
 </p>
 
+<!--
 <p>
   <b>Created by:</b>
   <%= @event.created_by %>
 </p>
+-->
 
+<!--
 <p>
   <b>Updated by:</b>
   <%= @event.updated_by %>
 </p>
+-->
 
+<!--
 <p>
   <b>Deleted:</b>
   <%= @event.deleted %>
 </p>
-
+-->
 
 <%= link_to 'Edit', edit_event_path(@event) %> |
 <%= link_to 'Back', events_path %>
+
+<% end %>
+<%= render template: "layouts/home" %>
