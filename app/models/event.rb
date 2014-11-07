@@ -7,6 +7,10 @@ class Event < ActiveRecord::Base
   # an event must have a category
   belongs_to :category
   
+  # associate event with user through user_event table
+  has_many :user_events
+  has_many :users, through: :user_events
+  
   # use event_id as the primary key and not the default generated id column
   self.primary_key = "event_id"
   
@@ -65,86 +69,5 @@ class Event < ActiveRecord::Base
     if to_time.present? && to_time < from_time
       errors.add(:to_time, "can't be less than From Time")
     end
-  end
-  
-  # associate event with user through user_event table
-  has_many :user_events
-  has_many :users, through: :user_events
-  
-  def self.search(name, category_id, venue, from_date, to_date)
-    
-	query = ''
-    
-	if !name.nil? && !name.blank?
-      #sc = "%"+name+"%"
-	  if query.length>0
-        query = query + ' AND name LIKE "%' + name + '%"'
-      else
-        query = query + 'name Like "%' + venue + '%"'
-      end
-    end
-
-    if !category_id.nil? && !category_id.blank?
-      if query.length>0
-        query = query + ' AND category_id = "' +  category_id + '"'
-      else
-        query = 'category_id = "' +  category_id + '"'
-      end
-    end
-
-    if !venue.nil? && !venue.blank?
-      #sc = "%"+venue+"%"
-      if query.length>0
-        query = query + ' AND venue LIKE "%' + venue + '%"'
-      else
-        query = query + 'venue Like "%' + venue + '%"'
-      end
-    end
-
-    if !from_date.nil?
-      day = from_date["written_on(3i)"];
-      
-	  if day.length != 0
-        if day.length == 2
-          day = "0" + day
-        end
-
-        month = from_date["written_on(2i)"];
-        if month.length == 1
-          month = "0" + month
-        end
-        date_string = from_date["written_on(1i)"] + "-" + month + "-" + day;
-        if query.length > 0
-          query = query + ' AND from_date >= "' +  date_string + '"'
-        else
-          query = 'from_date >= "' +  date_string + '"'
-        end
-      end
-    end
-
-
-    if !to_date.nil? && !to_date.blank?
-      day = to_date["written_on(3i)"];
-      if day.length != 0
-        if day.length < 2
-          day = "0" + day
-        end
-
-        month = to_date["written_on(2i)"];
-        if month.length < 2
-          month = "0" + month
-        end
-        date_string = to_date["written_on(1i)"] + "-" + month + "-" + day;
-        if query.length>0
-          query = query + ' AND to_date <= "' + date_string + '"'
-        else
-          query = 'to_date <= "' +  date_string + '"'
-        end
-      end
-    end
-    
-	#puts query
-
-    find(:all, :conditions => query)
   end
 end

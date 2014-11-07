@@ -2,10 +2,60 @@ class EventsController < ApplicationController
   # GET /events
   # GET /events.json
   def index
-    #@events = Event.all
+    
+	@events = Event.order("from_date");
 	#@events = Event.where(deleted: false)
-    @events = Event.search(params[:name], params[:category_id], params[:venue], params[:from_date], params[:to_date]).paginate(page: params[:page], per_page: 10)
-    #@events = @events.paginate(page: params[:page], per_page: 10)
+	
+	if params[:name]
+		@events = @events.where("name LIKE ?", "%#{params[:name]}%")
+	end
+	
+	if params[:category_id]
+		@events = @events.where("category_id = ?", params[:category_id])
+	end
+	
+	if params[:venue]
+		@events = @events.where("venue LIKE ?", "%#{params[:venue]}%")
+	end
+	
+	if params[:from_date]
+      day = params[:from_date]["written_on(3i)"];
+      
+	  if day.length != 0
+        if day.length < 2
+          day = "0" + day
+        end
+
+        month = params[:from_date]["written_on(2i)"];
+        if month.length < 2
+          month = "0" + month
+        end
+        date_string = params[:from_date]["written_on(1i)"] + "-" + month + "-" + day;
+        
+		@events = @events.where("from_date >= ?", date_string)
+      end
+    end
+	
+	if params[:to_date]
+      day = params[:to_date]["written_on(3i)"];
+      
+	  if day.length != 0
+        if day.length < 2
+          day = "0" + day
+        end
+
+        month = params[:to_date]["written_on(2i)"];
+        if month.length < 2
+          month = "0" + month
+        end
+        date_string = params[:to_date]["written_on(1i)"] + "-" + month + "-" + day;
+        
+		@events = @events.where("to_date <= ?", date_string)
+      end
+    end
+	
+	# limit records to 10 per page
+    @events = @events.paginate(page: params[:page], per_page: 10)
 
     respond_to do |format|
       format.html # index.html.erb
