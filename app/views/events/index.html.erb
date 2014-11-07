@@ -51,23 +51,23 @@
 
 <h1>Listing Events</h1>
 
-<table cellspacing="2" cellpadding="2" border="1">
+<table class="pretty" cellspacing="2" cellpadding="2" border="1">
   <tr>
     <!--<th>Event</th>-->
-    <th style="font-size:10pt;">Name</th>
-    <th style="font-size:10pt;">Description</th>
-    <th style="font-size:10pt;">From</th>
-    <th style="font-size:10pt;">To</th>
+    <th><%= sortable "name", Event %></th>
+    <th>Description</th>
+    <th>From</th>
+    <th>To</th>
     <!--<th>From time</th>-->
     <!--<th>To time</th>-->
-    <th style="font-size:10pt;">Venue</th>
-    <th style="font-size:10pt;">Category</th>
-    <th style="font-size:10pt;">Sign-In Starts Before(mins)</th>
-    <th style="font-size:10pt;">Sign-In Ends Before(mins)</th>
+    <th>Venue</th>
+    <th>Category</th>
+    <th>Sign-In Starts Before(mins)</th>
+    <th>Sign-In Ends Before(mins)</th>
     <!--<th>Created by</th>-->
     <!--<th>Updated by</th>-->
     <!--<th>Deleted</th>-->
-    <th style="font-size:10pt;" colspan="3">Actions</th>
+    <th colspan="3">Actions</th>
   </tr>
 
 <% @events.each do |event| %>
