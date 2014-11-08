@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  attr_accessible :user_id, :first_name, :last_name, :password, :dob, :email, :phone, :organization, :interests, :created_by, :updated_by, :deleted
+  attr_accessible :user_id, :first_name, :last_name, :password, :dob, :email, :phone, :organization, :interests, :admin, :created_by, :updated_by, :deleted
 
   # we want to use user_id as the primary key and not the default generated id
   self.primary_key = "user_id"

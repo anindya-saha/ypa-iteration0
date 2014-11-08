@@ -1,10 +1,10 @@
 class CreateEvents < ActiveRecord::Migration
   def change
     create_table :events, :primary_key => :event_id do |t|
-      t.string :name
+      t.string :name, :null => false
       t.text :desc
-      t.date :from_date
-      t.date :to_date
+      t.date :from_date, :null => false
+      t.date :to_date, :null => false
       t.time :from_time
       t.time :to_time
       t.string :venue
